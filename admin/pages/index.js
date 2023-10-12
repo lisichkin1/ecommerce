@@ -5,7 +5,16 @@ export default function Component() {
   if (!session) return;
   return (
     <Layout>
-      <div>Привет, {session?.user?.name}</div>
+      <div className="flex text-green-500 justify-between items-center">
+        <h2>
+          Привет, <b>{session?.user?.name}</b>
+        </h2>
+        <div className="flex gap-4 text-black items-center">
+          <span className="font-medium text-lg">{session?.user?.name}</span>
+
+          <img src={session?.user.image} alt="user image" className="w-12 h-12 rounded-full" />
+        </div>
+      </div>
     </Layout>
   );
 }

@@ -18,7 +18,7 @@ export default function Layout({ children }) {
   return (
     <div className="bg-green-100 min-h-screen flex">
       <Nav />
-      <div className="bg-slate-100 flex-grow">{children}</div>
+      <div className="bg-slate-100 flex-grow p-4">{children}</div>
     </div>
   );
 }
