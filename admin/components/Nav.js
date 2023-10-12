@@ -1,10 +1,14 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Nav() {
-  const inactiveLink = 'flex gap-2';
-  const activeLink = inactiveLink + ' bg-green-400 p-4 -translate-x-4 rounded-xl text-white';
+  const inactiveLink = 'flex gap-2 p-4 ';
+  const activeLink = inactiveLink + ' bg-green-400 p-4 rounded-xl ';
+  const router = useRouter();
+  const { pathname } = router;
+  console.log(pathname);
   return (
-    <aside className="text-gray-600 p-10">
+    <aside className="text-gray-600 p-10 w-1/5">
       <Link href={'/'} className="flex gap-2 mb-8">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,8 +25,8 @@ export default function Nav() {
         </svg>
         <span>Ecommerce Admin</span>
       </Link>
-      <nav className="flex flex-col gap-8 pl-4">
-        <Link href={'/'} className={activeLink}>
+      <nav className="flex flex-col gap-4 pl-4">
+        <Link href={'/'} className={pathname === '/' ? activeLink : inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -38,7 +42,9 @@ export default function Nav() {
           </svg>
           Панель мониторинга
         </Link>
-        <Link href={'/products'} className={inactiveLink}>
+        <Link
+          href={'/products'}
+          className={pathname.includes('/products') ? activeLink : inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -54,7 +60,7 @@ export default function Nav() {
           </svg>
           Товары
         </Link>
-        <Link href={'/orders'} className={inactiveLink}>
+        <Link href={'/orders'} className={pathname.includes('/orders') ? activeLink : inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -70,7 +76,9 @@ export default function Nav() {
           </svg>
           Заказы
         </Link>
-        <Link href={'/settongs'} className={inactiveLink}>
+        <Link
+          href={'/settings'}
+          className={pathname.includes('/settings') ? activeLink : inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
