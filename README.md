@@ -11,3 +11,4 @@
 - Next-auth
 - Firebase
 - Heroicons
+- Axios
