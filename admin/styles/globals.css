@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+input,
+textarea {
+  @apply border-none border-gray-600 rounded-md p-2 w-full mb-4 text-gray-600;
+}
+input:focus,
+textarea:focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-green-500;
+}
+h1 {
+  @apply text-green-500 text-2xl font-medium mb-4;
+}
+label {
+  @apply text-green-500 block mb-2;
+}
+.btn-primary {
+  @apply bg-green-400 p-2 rounded-lg pb-3 text-white transition duration-300 ease-in-out;
+}
+.btn-primary:hover {
+  @apply shadow-lg shadow-green-500;
+}
