@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function Nav() {
-  const inactiveLink = 'flex gap-2 p-4 ';
-  const activeLink = inactiveLink + ' bg-green-400 p-4 rounded-xl ';
+  const inactiveLink =
+    'flex gap-2 p-4 rounded-xl hover:shadow-lg transition duration-300 ease-in-out';
+  const activeLink =
+    inactiveLink + ' bg-green-400 p-4 rounded-xl shadow-lg shadow-green-500 text-white';
   const router = useRouter();
   const { pathname } = router;
   console.log(pathname);
