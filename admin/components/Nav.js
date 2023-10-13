@@ -8,7 +8,7 @@ export default function Nav() {
     inactiveLink + ' bg-green-400 p-4 rounded-xl shadow-lg shadow-green-500 text-white';
   const router = useRouter();
   const { pathname } = router;
-  console.log(pathname);
+
   return (
     <aside className="text-gray-600 p-10 w-1/5">
       <Link href={'/'} className="flex gap-2 mb-8">
