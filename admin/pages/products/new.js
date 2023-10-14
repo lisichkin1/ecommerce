@@ -1,30 +1,19 @@
 import Layout from '@/components/Layout';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import {
-  collection,
-  addDoc,
-  getDoc,
-  querySnapshot,
-  query,
-  onSnapshot,
-  deleteDoc,
-  doc,
-} from 'firebase/firestore';
-import { db } from '../firebase';
 
 export default function Home() {
-  const [newItem, setNewItem] = useState({ title: '', descriprion: '', price: '' });
-
+  const [newItem, setNewItem] = useState({ title: '', description: '', price: '' });
   const addItem = async (e) => {
     e.preventDefault();
-    if (newItem.title !== '' && newItem.price !== '' && newItem.descriprion !== '') {
-      await addDoc(collection(db, 'products'), {
-        title: newItem.title.trim(),
-        descriprion: newItem.descriprion,
-        price: newItem.price,
-      });
-      setNewItem({ title: '', descriprion: '', price: '' });
+    if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
+      try {
+        const response = await axios.post('/api/products', newItem);
+        console.log('Сервер вернул:', response.data);
+        setNewItem({ title: '', description: '', price: '' });
+      } catch (error) {
+        console.error('Ошибка при отправке данных на сервер:', error);
+      }
     }
   };
 
@@ -43,8 +32,8 @@ export default function Home() {
         <label>Описание</label>
         <textarea
           placeholder="Введите описание"
-          value={newItem.descriprion}
-          onChange={(e) => setNewItem({ ...newItem, descriprion: e.target.value })}
+          value={newItem.description}
+          onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
         />
         <input
           className="input-product"
