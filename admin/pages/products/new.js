@@ -1,44 +1,59 @@
 import Layout from '@/components/Layout';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  collection,
+  addDoc,
+  getDoc,
+  querySnapshot,
+  query,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+import { db } from '../firebase';
 
-export default function NewProduct() {
-  const [title, setTitle] = useState('');
-  const [descriprion, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  console.log(title, descriprion, price);
-  async function createProduct(ev) {
-    ev.preventDefault();
-    const data = { title, descriprion, price };
-    await axios.post('/api/products', data);
-  }
+export default function Home() {
+  const [newItem, setNewItem] = useState({ title: '', descriprion: '', price: '' });
+
+  const addItem = async (e) => {
+    e.preventDefault();
+    if (newItem.title !== '' && newItem.price !== '' && newItem.descriprion !== '') {
+      await addDoc(collection(db, 'products'), {
+        title: newItem.title.trim(),
+        descriprion: newItem.descriprion,
+        price: newItem.price,
+      });
+      setNewItem({ title: '', descriprion: '', price: '' });
+    }
+  };
+
   return (
     <Layout>
-      <form onSubmit={createProduct}>
+      <form>
         <h1>Новый товар</h1>
         <label>Название товара</label>
         <input
           className="input-product"
           type="text"
           placeholder="Введите название товара"
-          value={title}
-          onChange={(ev) => setTitle(ev.target.value)}
+          value={newItem.title}
+          onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
         />
         <label>Описание</label>
         <textarea
           placeholder="Введите описание"
-          value={descriprion}
-          onChange={(ev) => setDescription(ev.target.value)}
+          value={newItem.descriprion}
+          onChange={(e) => setNewItem({ ...newItem, descriprion: e.target.value })}
         />
-        <label>Цена(руб)</label>
         <input
           className="input-product"
           type="text"
           placeholder="Введите цену"
-          value={price}
-          onChange={(ev) => setPrice(ev.target.value)}
+          value={newItem.price}
+          onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
         />
-        <button type="submit" className="btn-primary">
+        <button onClick={addItem} className="btn-primary">
           Сохранить
         </button>
       </form>
