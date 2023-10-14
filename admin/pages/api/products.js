@@ -30,10 +30,7 @@ export default async function handle(req, res) {
       console.error('Ошибка при получении товаров:', error);
       res.status(500).json({ message: 'Произошла ошибка при получении товаров' });
     }
-  } else {
-    res.status(405).end(); // Метод не поддерживается
-  }
-  if (method === 'POST') {
+  } else if (method === 'POST') {
     try {
       const { title, description, price } = req.body;
 
