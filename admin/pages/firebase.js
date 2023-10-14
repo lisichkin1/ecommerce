@@ -1,4 +1,6 @@
-import { initializeApp, getApp, getApps } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import 'dotenv/config';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -10,4 +12,5 @@ const firebaseConfig = {
 };
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-export { app };
+const db = getFirestore(app);
+export { app, db };
