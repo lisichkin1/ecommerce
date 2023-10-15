@@ -14,21 +14,41 @@ import { db } from '../firebase';
 export default async function handle(req, res) {
   const { method } = req;
   if (req.method === 'GET') {
-    try {
-      const productsCollection = collection(db, 'products');
-      const productsQuery = query(productsCollection);
+    const { id } = req.query; // Получение параметра id из параметров запроса
+    if (id) {
+      try {
+        console.log(id);
+        const productId = id;
+        const productDocRef = doc(db, 'products', productId);
+        const productDoc = await getDoc(productDocRef);
+        if (productDoc.exists()) {
+          const productData = productDoc.data();
+          res.status(200).json(productData);
+        } else {
+          res.status(404).json({ message: 'Товар не найден' });
+        }
+        console.log(productDoc);
+      } catch (error) {
+        console.error('Ошибка при получении товара:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении товара' });
+      }
+    } else {
+      try {
+        const productsCollection = collection(db, 'products');
+        const productsQuery = query(productsCollection);
 
-      const snapshot = await getDocs(productsQuery);
+        const snapshot = await getDocs(productsQuery);
 
-      const products = [];
-      snapshot.forEach((doc) => {
-        products.push({ id: doc.id, ...doc.data() });
-      });
+        const products = [];
+        snapshot.forEach((doc) => {
+          products.push({ id: doc.id, ...doc.data() });
+        });
 
-      res.status(200).json(products);
-    } catch (error) {
-      console.error('Ошибка при получении товаров:', error);
-      res.status(500).json({ message: 'Произошла ошибка при получении товаров' });
+        res.status(200).json(products);
+      } catch (error) {
+        console.error('Ошибка при получении товаров:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении товаров' });
+      }
     }
   } else if (method === 'POST') {
     try {
