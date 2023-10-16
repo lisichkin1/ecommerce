@@ -1,19 +1,25 @@
 import Layout from '@/components/Layout';
+import ProductsForm from '@/components/ProductsForm';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function EditProductPage() {
   const router = useRouter();
+  const [productInfo, setProductInfo] = useState(null);
   const { id } = router.query;
   useEffect(() => {
     if (id) {
-      // Измените запрос, чтобы передать id как параметр запроса
       axios.get(`/api/products?id=${id}`).then((response) => {
-        console.log(response.data);
+        setProductInfo(response.data);
       });
     }
   }, [id]);
 
-  return <Layout>Редактирование</Layout>;
+  return (
+    <Layout>
+      <h1>Редактировать товар</h1>
+      {productInfo && <ProductsForm {...productInfo} />}
+    </Layout>
+  );
 }
