@@ -4,6 +4,7 @@ import {
   getDoc,
   querySnapshot,
   query,
+  updateDoc,
   getDocs,
   onSnapshot,
   deleteDoc,
@@ -17,17 +18,15 @@ export default async function handle(req, res) {
     const { id } = req.query; // Получение параметра id из параметров запроса
     if (id) {
       try {
-        console.log(id);
         const productId = id;
         const productDocRef = doc(db, 'products', productId);
         const productDoc = await getDoc(productDocRef);
         if (productDoc.exists()) {
           const productData = productDoc.data();
-          res.status(200).json(productData);
+          res.status(200).json({ id: productId, ...productData });
         } else {
           res.status(404).json({ message: 'Товар не найден' });
         }
-        console.log(productDoc);
       } catch (error) {
         console.error('Ошибка при получении товара:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении товара' });
@@ -67,6 +66,21 @@ export default async function handle(req, res) {
     } catch (error) {
       console.error('Ошибка при создании товара:', error);
       res.status(500).json({ message: 'Произошла ошибка при создании товара' });
+    }
+  } else if (method === 'PUT') {
+    const { title, description, price, id } = req.body;
+    try {
+      const productDocRef = doc(db, 'products', id);
+      await updateDoc(productDocRef, {
+        title: title.trim(),
+        description,
+        price,
+      });
+
+      res.status(200).json({ message: 'Товар успешно обновлен' });
+    } catch (error) {
+      console.error('Ошибка при обновлении товара:', error);
+      res.status(500).json({ message: 'Произошла ошибка при обновлении товара' });
     }
   } else {
     res.status(405).end(); // Метод не поддерживается
