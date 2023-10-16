@@ -14,8 +14,8 @@ import { db } from '../firebase';
 
 export default async function handle(req, res) {
   const { method } = req;
+  const { id } = req.query; // Получение параметра id из параметров запроса
   if (req.method === 'GET') {
-    const { id } = req.query; // Получение параметра id из параметров запроса
     if (id) {
       try {
         const productId = id;
@@ -81,6 +81,16 @@ export default async function handle(req, res) {
     } catch (error) {
       console.error('Ошибка при обновлении товара:', error);
       res.status(500).json({ message: 'Произошла ошибка при обновлении товара' });
+    }
+  } else if (method === 'DELETE') {
+    if (id) {
+      try {
+        await deleteDoc(doc(db, 'products', id));
+        res.status(200).json({ message: 'Товар успешно удален' }); // Отправляем успешный ответ
+      } catch (error) {
+        console.error('Ошибка при удалении товара:', error);
+        res.status(500).json({ message: 'Произошла ошибка при удалении товара' });
+      }
     }
   } else {
     res.status(405).end(); // Метод не поддерживается
