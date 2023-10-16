@@ -9,6 +9,7 @@ export default function ProductsForm({
   title: existingTitle,
   description: existingDescription,
   price: existingPrice,
+  images,
 }) {
   const [newItem, setNewItem] = useState({
     title: existingTitle || '',
@@ -17,7 +18,6 @@ export default function ProductsForm({
   });
   const [goToProduct, setGoToProduct] = useState(false);
   const router = useRouter();
-  console.log({ id });
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
@@ -46,6 +46,21 @@ export default function ProductsForm({
   if (goToProduct) {
     router.push('/products');
   }
+  const uploadImages = async (ev) => {
+    const files = ev.target?.files;
+    if (files && files?.length > 0) {
+      const data = new FormData();
+      for (const file of files) {
+        data.append('file', file);
+      }
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: data,
+      });
+
+      console.log(res);
+    }
+  };
 
   return (
     <form>
@@ -57,6 +72,27 @@ export default function ProductsForm({
         value={newItem.title}
         onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
       />
+      <label>Фотографии</label>
+      <div className="mb-4">
+        <label className="w-32 h-32 border flex items-center justify-center gap-2 flex-col text-gray-500 rounded-xl bg-gray-200 border-green-300 cursor-pointer">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15"
+            />
+          </svg>
+          <span>Загрузить</span>
+          <input type="file" className="hidden" onChange={uploadImages} />
+        </label>
+        {!images?.length && <div>Нет фотографий для этого товара</div>}
+      </div>
       <label>Описание</label>
       <textarea
         placeholder="Введите описание"
