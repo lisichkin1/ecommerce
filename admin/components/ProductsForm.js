@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout';
 import axios from 'axios';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useReducer } from 'react';
@@ -9,7 +10,7 @@ export default function ProductsForm({
   title: existingTitle,
   description: existingDescription,
   price: existingPrice,
-  images,
+  images: existingImages,
 }) {
   const [newItem, setNewItem] = useState({
     title: existingTitle || '',
@@ -17,6 +18,7 @@ export default function ProductsForm({
     price: existingPrice || '',
   });
   const [goToProduct, setGoToProduct] = useState(false);
+  const [images, setImages] = useState(existingImages || []);
   const router = useRouter();
   const addItem = async (e) => {
     e.preventDefault();
@@ -53,12 +55,10 @@ export default function ProductsForm({
       for (const file of files) {
         data.append('file', file);
       }
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: data,
+      const res = await axios.post('/api/upload', data);
+      setImages((oldImages) => {
+        return [...oldImages, ...res.data.links];
       });
-
-      console.log(res);
     }
   };
 
@@ -73,7 +73,13 @@ export default function ProductsForm({
         onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
       />
       <label>Фотографии</label>
-      <div className="mb-4">
+      <div className="mb-4 flex">
+        {images?.length &&
+          images.map((link) => (
+            <div key={link} className="h-32">
+              <Image src={link} alt="photo" width={300} height={300} />
+            </div>
+          ))}
         <label className="w-32 h-32 border flex items-center justify-center gap-2 flex-col text-gray-500 rounded-xl bg-gray-200 border-green-300 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
