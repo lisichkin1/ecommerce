@@ -12,4 +12,5 @@
 - Firebase
 - Heroicons
 - Axios
-- Multiparty
+- multiparty
+- easy-yandex-s3
