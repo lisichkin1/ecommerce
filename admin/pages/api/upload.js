@@ -12,9 +12,6 @@ export default async function handle(req, res) {
       console.error('Ошибка при разборе формы:', err);
       return res.status(500).json({ error: 'Ошибка при разборе формы' });
     }
-
-    console.log('Длина файлов:', files.file);
-
     const s3 = new EasyYandexS3({
       auth: {
         accessKeyId: process.env.YANDEX_CLOUD_ID,
@@ -31,8 +28,6 @@ export default async function handle(req, res) {
         files.file.map(async (file) => {
           const ext = file.originalFilename.split('.').pop();
           const newFileName = Date.now() + '.' + ext;
-
-          console.log({ ext, file });
 
           const uploadResult = await s3.Upload(
             {
