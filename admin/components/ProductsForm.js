@@ -16,6 +16,7 @@ export default function ProductsForm({
     title: existingTitle || '',
     description: existingDescription || '',
     price: existingPrice || '',
+    images: existingImages || [],
   });
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
@@ -25,9 +26,9 @@ export default function ProductsForm({
     if (id) {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.put('/api/products', { ...newItem, id });
+          const response = await axios.put('/api/products', { ...newItem, id, images });
           console.log('Сервер вернул:', response.data);
-          setNewItem({ title: '', description: '', price: '' });
+          setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {
           console.error('Ошибка при отправке данных на сервер:', error);
         }
@@ -35,9 +36,9 @@ export default function ProductsForm({
     } else {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.post('/api/products', newItem);
+          const response = await axios.post('/api/products', newItem, images);
           console.log('Сервер вернул:', response.data);
-          setNewItem({ title: '', description: '', price: '' });
+          setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {
           console.error('Ошибка при отправке данных на сервер:', error);
         }
@@ -73,11 +74,11 @@ export default function ProductsForm({
         onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
       />
       <label>Фотографии</label>
-      <div className="mb-4 flex">
+      <div className="mb-4 flex flex-wrap gap-2">
         {images?.length &&
           images.map((link) => (
-            <div key={link} className="h-32">
-              <Image src={link} alt="photo" width={300} height={300} />
+            <div key={link} className="h-32 ">
+              <Image src={link} alt="photo" width={300} height={300} className="rounded-xl" />
             </div>
           ))}
         <label className="w-32 h-32 border flex items-center justify-center gap-2 flex-col text-gray-500 rounded-xl bg-gray-200 border-green-300 cursor-pointer">
