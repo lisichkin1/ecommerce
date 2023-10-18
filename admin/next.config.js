@@ -9,6 +9,14 @@ const nextConfig = {
     FIREBASE_SENDER_ID: process.env.FIREBASE_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ecommerce.storage.yandexcloud.net',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
