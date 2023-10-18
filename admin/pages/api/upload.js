@@ -2,7 +2,7 @@ import multiparty from 'multiparty';
 import EasyYandexS3 from 'easy-yandex-s3';
 const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config(); // Загрузить переменные окружения из файла .env
+dotenv.config();
 
 export default async function handle(req, res) {
   const form = new multiparty.Form();
@@ -36,7 +36,7 @@ export default async function handle(req, res) {
 
           const uploadResult = await s3.Upload(
             {
-              path: file.path, // Убедитесь, что вы передаете путь к файлу, а не содержимое
+              path: file.path,
               name: newFileName,
             },
             '/images/',
