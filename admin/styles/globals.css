@@ -10,8 +10,7 @@ textarea:focus {
   @apply focus:outline-none focus:ring-2 focus:ring-green-500;
 }
 img {
-  max-height: 100%;
-  max-width: 100%;
+  height: 100%;
 }
 h1 {
   @apply text-green-500 text-2xl font-medium mb-4;

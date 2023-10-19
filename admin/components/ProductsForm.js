@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useReducer } from 'react';
+import Spinner from './Spinner';
 
 export default function ProductsForm({
   id,
@@ -20,6 +21,7 @@ export default function ProductsForm({
   });
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
+  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
   const addItem = async (e) => {
     e.preventDefault();
@@ -52,6 +54,7 @@ export default function ProductsForm({
   const uploadImages = async (ev) => {
     const files = ev.target?.files;
     if (files && files?.length > 0) {
+      setIsUploading(true);
       const data = new FormData();
       for (const file of files) {
         data.append('file', file);
@@ -60,6 +63,7 @@ export default function ProductsForm({
       setImages((oldImages) => {
         return [...oldImages, ...res.data.links];
       });
+      setIsUploading(false);
     }
   };
 
@@ -75,12 +79,17 @@ export default function ProductsForm({
       />
       <label>Фотографии</label>
       <div className="mb-4 flex flex-wrap gap-2">
-        {images?.length &&
+        {!!images?.length &&
           images.map((link) => (
             <div key={link} className="h-32 ">
-              <Image src={link} alt="photo" width={300} height={300} className="rounded-xl" />
+              <Image src={link} alt="photo" width={200} height={300} className="rounded-xl" />
             </div>
           ))}
+        {isUploading && (
+          <div className="h-32 flex items-center w-32 justify-center">
+            <Spinner />
+          </div>
+        )}
         <label className="w-32 h-32 border flex items-center justify-center gap-2 flex-col text-gray-500 rounded-xl bg-gray-200 border-green-300 cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +107,6 @@ export default function ProductsForm({
           <span>Загрузить</span>
           <input type="file" className="hidden" onChange={uploadImages} />
         </label>
-        {!images?.length && <div>Нет фотографий для этого товара</div>}
       </div>
       <label>Описание</label>
       <textarea
