@@ -5,17 +5,19 @@ import React, { useEffect, useState } from 'react';
 export default function categories() {
   const [name, setName] = useState('');
   const [categoriesList, setCategoriesList] = useState([]);
+  const [parentCategory, setParentCategory] = useState('');
   useEffect(() => {
     fetchCategories();
   }, []);
   const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
+      console.log(response.data);
       setCategoriesList(response.data);
     });
   };
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    await axios.post('/api/categories', { name });
+    await axios.post('/api/categories', { name, parentCategory });
     setName('');
     fetchCategories();
   };
@@ -40,6 +42,16 @@ export default function categories() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+        <select
+          className="mb-0"
+          value={parentCategory}
+          onChange={(ev) => setParentCategory(ev.target.value)}>
+          <option value="0">Нет родительской категории</option>
+          {sortedCategoriesList.length > 0 &&
+            sortedCategoriesList.map((category) => (
+              <option value={category.id}>{category.name}</option>
+            ))}
+        </select>
         <button type="submit" className="btn-primary">
           Сохранить
         </button>
@@ -48,6 +60,8 @@ export default function categories() {
         <thead>
           <tr>
             <td>Название категории</td>
+            <td>Родительская категория</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
@@ -55,6 +69,15 @@ export default function categories() {
             sortedCategoriesList.map((category) => (
               <tr key={category.id}>
                 <td>{category.name}</td>
+                <td>
+                  {category.parent
+                    ? categoriesList.find((c) => c.id === category.parent)?.name
+                    : 'Нет родительской категории'}
+                </td>
+                <td className="flex flex-grow gap-2">
+                  <button className="btn-primary-second">Сохранить</button>
+                  <button className="btn-primary-second">Удалить</button>
+                </td>
               </tr>
             ))}
         </tbody>

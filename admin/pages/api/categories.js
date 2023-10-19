@@ -5,9 +5,10 @@ export default async function handle(req, res) {
   const { method } = req;
   if (method === 'POST') {
     try {
-      const { name } = req.body;
+      const { name, parentCategory } = req.body;
       const newDocRef = await addDoc(collection(db, 'categories'), {
         name: name,
+        parent: parentCategory,
       });
       console.log('Категория успешно добавлена с идентификатором: ', newDocRef.id);
       res.status(200).json({ message: 'категория успешно создана' });
