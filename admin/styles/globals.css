@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 input,
-textarea {
+textarea,
+select {
   @apply border-none border-gray-600 rounded-md p-2 w-full mb-4 text-gray-600;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   @apply focus:outline-none focus:ring-2 focus:ring-green-500;
 }
 img {
@@ -31,7 +33,7 @@ table.basic thead tr td {
   @apply bg-green-100;
 }
 table.basic tr td {
-  @apply border p-2 border-gray-300 w-1/2;
+  @apply border p-2 border-gray-300;
 }
 table.basic a {
   @apply bg-green-400 p-1 rounded-md px-2 text-white text-sm inline-flex gap-1 mr-4;
@@ -44,4 +46,7 @@ table.basic a {
 }
 .delete-title {
   @apply text-lg mb-4;
+}
+.btn-primary-second {
+  @apply bg-green-400 p-1 rounded-md px-2 text-white text-sm inline-flex gap-1 mr-4;
 }
