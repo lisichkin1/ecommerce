@@ -6,16 +6,28 @@ export default function categories() {
   const [name, setName] = useState('');
   const [categoriesList, setCategoriesList] = useState([]);
   useEffect(() => {
+    fetchCategories();
+  }, []);
+  const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
       setCategoriesList(response.data);
     });
-  }, []);
-
+  };
   const saveCategory = async (ev) => {
     ev.preventDefault();
     await axios.post('/api/categories', { name });
     setName('');
+    fetchCategories();
   };
+  const sortedCategoriesList = categoriesList.sort((a, b) => {
+    if (a.name.toLowerCase() < b.name.toLowerCase()) {
+      return -1;
+    }
+    if (a.name.toLowerCase() > b.name.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
   return (
     <Layout>
       <h1>Категории</h1>
@@ -39,11 +51,12 @@ export default function categories() {
           </tr>
         </thead>
         <tbody>
-          {categoriesList.map((category) => (
-            <tr key={category.id}>
-              <td>{category.name}</td>
-            </tr>
-          ))}
+          {sortedCategoriesList.length > 0 &&
+            sortedCategoriesList.map((category) => (
+              <tr key={category.id}>
+                <td>{category.name}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </Layout>
