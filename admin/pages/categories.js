@@ -20,6 +20,7 @@ export default function categories() {
     const data = { name, parentCategory };
     if (editedCategory) {
       await axios.put('/api/categories', { ...data, id: editedCategory.id });
+      setEditedCategory(null);
     } else {
       await axios.post('/api/categories', data);
     }
@@ -87,7 +88,7 @@ export default function categories() {
                 <td>
                   {category.parent
                     ? categoriesList.find((c) => c.id === category.parent)?.name
-                    : 'Нет родительской категории'}
+                    : null}
                 </td>
                 <td className="flex flex-grow gap-2">
                   <button className="btn-primary-second" onClick={() => editCategory(category)}>
