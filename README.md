@@ -15,3 +15,4 @@
 - multiparty
 - easy-yandex-s3
 - React Spinners
+- sweetalert2
