@@ -35,7 +35,14 @@ export default function categories() {
     }
     return 0;
   });
-
+  const editCategory = (category) => {
+    const parentCategoryId = category.parent;
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(parentCategoryId || '0');
+    console.log(parentCategoryId);
+    console.log(parentCategory);
+  };
   return (
     <Layout>
       <h1>Категории</h1>
