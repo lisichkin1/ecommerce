@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
 
 export default function categories() {
@@ -43,6 +44,25 @@ export default function categories() {
     setParentCategory(parentCategoryId || '0');
     console.log(parentCategoryId);
     console.log(parentCategory);
+  };
+  const deleteCategory = (category) => {
+    Swal.fire({
+      title: 'Ты уверен?',
+      text: `Удалить категорию ${category.name}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#4ade80',
+      cancelButtonColor: '#d33',
+      reverseButtons: true,
+      confirmButtonText: 'Да, удалить',
+      cancelButtonText: 'Отменить',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.delete(`/api/categories?id=${category.id}`, { data: { id: category.id } });
+        fetchCategories();
+        Swal.fire('Категория удалена!', '', 'success');
+      }
+    });
   };
   return (
     <Layout>
@@ -94,7 +114,9 @@ export default function categories() {
                   <button className="btn-primary-second" onClick={() => editCategory(category)}>
                     Редактировать
                   </button>
-                  <button className="btn-primary-second">Удалить</button>
+                  <button className="btn-primary-second" onClick={() => deleteCategory(category)}>
+                    Удалить
+                  </button>
                 </td>
               </tr>
             ))}
