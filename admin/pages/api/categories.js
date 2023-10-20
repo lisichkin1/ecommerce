@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default async function handle(req, res) {
@@ -29,6 +29,19 @@ export default async function handle(req, res) {
     } catch (error) {
       consolel.error('ошибка при получении категорий', error);
       res.status(500).json({ message: 'Произошла ошибка при получении категорий' });
+    }
+  } else if (method === 'PUT') {
+    try {
+      const { name, parentCategory, id } = req.body;
+      const productDocRef = doc(db, 'categories', id);
+      await updateDoc(productDocRef, {
+        name: name,
+        parent: parentCategory,
+      });
+      res.status(200).json({ message: 'категория успешно обновлена' });
+    } catch (error) {
+      console.error('Ошибка при обновлении категории:', error);
+      res.status(500).json({ message: 'Произошла ошибка при обновлении категории' });
     }
   }
 }
