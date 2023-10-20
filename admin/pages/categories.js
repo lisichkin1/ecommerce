@@ -6,18 +6,23 @@ export default function categories() {
   const [name, setName] = useState('');
   const [categoriesList, setCategoriesList] = useState([]);
   const [parentCategory, setParentCategory] = useState('');
+  const [editedCategory, setEditedCategory] = useState(null);
   useEffect(() => {
     fetchCategories();
   }, []);
   const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
-      console.log(response.data);
       setCategoriesList(response.data);
     });
   };
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    await axios.post('/api/categories', { name, parentCategory });
+    const data = { name, parentCategory };
+    if (editedCategory) {
+      await axios.put('/api/categories', { ...data, id: editedCategory.id });
+    } else {
+      await axios.post('/api/categories', data);
+    }
     setName('');
     fetchCategories();
   };
@@ -30,10 +35,13 @@ export default function categories() {
     }
     return 0;
   });
+
   return (
     <Layout>
       <h1>Категории</h1>
-      <label>Название новой категории</label>
+      <label>
+        {editedCategory ? `Редактировать категорию ${editedCategory.name}` : 'Новая категория'}
+      </label>
       <form onSubmit={saveCategory} className="flex gap-4 justify-center items-center">
         <input
           className="mb-0"
@@ -75,7 +83,9 @@ export default function categories() {
                     : 'Нет родительской категории'}
                 </td>
                 <td className="flex flex-grow gap-2">
-                  <button className="btn-primary-second">Сохранить</button>
+                  <button className="btn-primary-second" onClick={() => editCategory(category)}>
+                    Редактировать
+                  </button>
                   <button className="btn-primary-second">Удалить</button>
                 </td>
               </tr>
