@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ReactSortable } from 'react-sortablejs';
 import React, { useState, useEffect, useReducer } from 'react';
+import { setCategories } from '@/redux/slices/categorySlice';
+import { useSelector, useDispatch } from 'react-redux';
 import Spinner from './Spinner';
 
 export default function ProductsForm({
@@ -20,12 +22,14 @@ export default function ProductsForm({
     price: existingPrice || '',
     images: existingImages || [],
   });
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
   const [isUploading, setIsUploading] = useState(false);
   const [categoryName, setCategoryName] = useState('');
-  const [categoriesList, setCategoriesList] = useState([]);
-  const router = useRouter();
+  const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -77,18 +81,10 @@ export default function ProductsForm({
   };
   const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
-      setCategoriesList(response.data);
+      dispatch(setCategories(response.data));
     });
   };
-  const sortedCategoriesList = categoriesList.sort((a, b) => {
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1;
-    }
-    if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1;
-    }
-    return 0;
-  });
+
   return (
     <form>
       <label>Название товара</label>
@@ -105,10 +101,8 @@ export default function ProductsForm({
         value={categoryName}
         onChange={(ev) => setCategoryName(ev.target.value)}>
         <option value="0">Нет родительской категории</option>
-        {sortedCategoriesList.length > 0 &&
-          sortedCategoriesList.map((category) => (
-            <option value={category.id}>{category.name}</option>
-          ))}
+        {categoriesList.length > 0 &&
+          categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
       </select>
       <label>Фотографии</label>
       <div className="mb-4 flex flex-wrap gap-2">
