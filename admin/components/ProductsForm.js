@@ -23,7 +23,12 @@ export default function ProductsForm({
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
   const [isUploading, setIsUploading] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
+  const [categoriesList, setCategoriesList] = useState([]);
   const router = useRouter();
+  useEffect(() => {
+    fetchCategories();
+  }, []);
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
@@ -70,6 +75,20 @@ export default function ProductsForm({
   const updateImagesOrder = (images) => {
     setImages(images);
   };
+  const fetchCategories = () => {
+    axios.get('/api/categories').then((response) => {
+      setCategoriesList(response.data);
+    });
+  };
+  const sortedCategoriesList = categoriesList.sort((a, b) => {
+    if (a.name.toLowerCase() < b.name.toLowerCase()) {
+      return -1;
+    }
+    if (a.name.toLowerCase() > b.name.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
   return (
     <form>
       <label>Название товара</label>
@@ -80,6 +99,17 @@ export default function ProductsForm({
         value={newItem.title}
         onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
       />
+      <label>Категория</label>
+      <select
+        className="mb-0"
+        value={categoryName}
+        onChange={(ev) => setCategoryName(ev.target.value)}>
+        <option value="0">Нет родительской категории</option>
+        {sortedCategoriesList.length > 0 &&
+          sortedCategoriesList.map((category) => (
+            <option value={category.id}>{category.name}</option>
+          ))}
+      </select>
       <label>Фотографии</label>
       <div className="mb-4 flex flex-wrap gap-2">
         <ReactSortable list={images} setList={updateImagesOrder} className="flex flex-wrap gap-2">
