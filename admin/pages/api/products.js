@@ -50,13 +50,14 @@ export default async function handle(req, res) {
       }
     }
   } else if (method === 'POST') {
-    const { title, description, price, images } = req.body;
+    const { title, description, price, images, category } = req.body;
     try {
       const newDocRef = await addDoc(collection(db, 'products'), {
         title: title.trim(),
         description: description,
         price: price,
         images: images,
+        category: category,
       });
 
       console.log('Документ успешно добавлен с идентификатором: ', newDocRef.id);
@@ -68,7 +69,8 @@ export default async function handle(req, res) {
       res.status(500).json({ message: 'Произошла ошибка при создании товара' });
     }
   } else if (method === 'PUT') {
-    const { title, description, price, images, id } = req.body;
+    const { title, description, price, images, id, category } = req.body;
+    console.log('КАТЕГОРИЯ', category);
     try {
       const productDocRef = doc(db, 'products', id);
       await updateDoc(productDocRef, {
@@ -76,6 +78,7 @@ export default async function handle(req, res) {
         description,
         price,
         images: images,
+        category: category,
       });
 
       res.status(200).json({ message: 'Товар успешно обновлен' });

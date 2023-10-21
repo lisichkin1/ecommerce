@@ -15,6 +15,7 @@ export default function ProductsForm({
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
+  category: existingCategory,
 }) {
   const [newItem, setNewItem] = useState({
     title: existingTitle || '',
@@ -27,18 +28,26 @@ export default function ProductsForm({
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
   const [isUploading, setIsUploading] = useState(false);
-  const [categoryName, setCategoryName] = useState('');
+  const [category, setCategory] = useState('' || existingCategory);
   const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
 
   useEffect(() => {
     fetchCategories();
   }, []);
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.put('/api/products', { ...newItem, id, images });
+          const response = await axios.put('/api/products', {
+            ...newItem,
+            id,
+            images,
+            category,
+          });
           console.log('Сервер вернул:', response.data);
           setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {
@@ -48,7 +57,7 @@ export default function ProductsForm({
     } else {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.post('/api/products', { ...newItem, images });
+          const response = await axios.post('/api/products', { ...newItem, images, category });
           console.log('Сервер вернул:', response.data);
           setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {
@@ -96,10 +105,7 @@ export default function ProductsForm({
         onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
       />
       <label>Категория</label>
-      <select
-        className="mb-0"
-        value={categoryName}
-        onChange={(ev) => setCategoryName(ev.target.value)}>
+      <select className="mb-0" value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="0">Нет родительской категории</option>
         {categoriesList.length > 0 &&
           categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
