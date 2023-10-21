@@ -39,7 +39,7 @@ export default function ProductsForm({
     } else {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.post('/api/products', newItem, images);
+          const response = await axios.post('/api/products', { ...newItem, images });
           console.log('Сервер вернул:', response.data);
           setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {

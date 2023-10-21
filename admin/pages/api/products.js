@@ -50,9 +50,8 @@ export default async function handle(req, res) {
       }
     }
   } else if (method === 'POST') {
+    const { title, description, price, images } = req.body;
     try {
-      const { title, description, price, images } = req.body;
-
       const newDocRef = await addDoc(collection(db, 'products'), {
         title: title.trim(),
         description: description,
@@ -70,7 +69,6 @@ export default async function handle(req, res) {
     }
   } else if (method === 'PUT') {
     const { title, description, price, images, id } = req.body;
-    console.log('КАРТИНКА ', { images });
     try {
       const productDocRef = doc(db, 'products', id);
       await updateDoc(productDocRef, {
