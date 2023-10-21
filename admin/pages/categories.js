@@ -64,22 +64,30 @@ export default function categories() {
       <label>
         {editedCategory ? `Редактировать категорию ${editedCategory.name}` : 'Новая категория'}
       </label>
-      <form onSubmit={saveCategory} className="flex gap-4 justify-center items-center">
-        <input
-          className="mb-0"
-          type="text"
-          placeholder="Название категории"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <select
-          className="mb-0"
-          value={parentCategory}
-          onChange={(ev) => setParentCategory(ev.target.value)}>
-          <option value="0">Нет родительской категории</option>
-          {categoriesList.length > 0 &&
-            categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
-        </select>
+      <form onSubmit={saveCategory}>
+        <div className="flex gap-1">
+          <input
+            className="mb-0"
+            type="text"
+            placeholder="Название категории"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <select
+            className="mb-0"
+            value={parentCategory}
+            onChange={(ev) => setParentCategory(ev.target.value)}>
+            <option value="0">Нет родительской категории</option>
+            {categoriesList.length > 0 &&
+              categoriesList.map((category) => (
+                <option value={category.id}>{category.name}</option>
+              ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label>Характеристики</label>
+          <button className="button-default-secondary">Добавить характеристику</button>
+        </div>
         <button type="submit" className="btn-primary">
           Сохранить
         </button>

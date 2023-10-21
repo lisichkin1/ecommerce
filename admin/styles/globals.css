@@ -21,7 +21,7 @@ label {
   @apply text-green-500 block mb-2 text-lg;
 }
 .btn-primary {
-  @apply bg-green-400 p-2 rounded-lg pb-3 text-white transition duration-300 ease-in-out;
+  @apply bg-green-400 p-2 px-4 rounded-lg pb-3 text-white transition duration-300 ease-in-out;
 }
 .btn-primary:hover {
   @apply shadow-lg shadow-green-500;
@@ -49,4 +49,7 @@ table.basic a {
 }
 .btn-primary-second {
   @apply bg-green-400 p-1 rounded-md px-2 text-white text-sm inline-flex gap-1 mr-4;
+}
+.button-default-secondary {
+  @apply text-black p-3 px-6 rounded-lg transition duration-300 ease-in-out shadow-lg hover:shadow-green-400 ring-1 ring-gray-300;
 }
