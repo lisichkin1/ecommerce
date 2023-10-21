@@ -34,9 +34,6 @@ export default function ProductsForm({
   useEffect(() => {
     fetchCategories();
   }, []);
-  useEffect(() => {
-    console.log(category);
-  }, [category]);
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
