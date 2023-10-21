@@ -2,18 +2,21 @@ import Layout from '@/components/Layout';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
-
+import { setCategories } from '@/redux/slices/categorySlice';
+import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
-  const [categoriesList, setCategoriesList] = useState([]);
   const [parentCategory, setParentCategory] = useState('');
   const [editedCategory, setEditedCategory] = useState(null);
+  const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
+
   useEffect(() => {
     fetchCategories();
   }, []);
   const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
-      setCategoriesList(response.data);
+      dispatch(setCategories(response.data));
     });
   };
   const saveCategory = async (ev) => {
@@ -28,15 +31,6 @@ export default function categories() {
     setName('');
     fetchCategories();
   };
-  const sortedCategoriesList = categoriesList.sort((a, b) => {
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1;
-    }
-    if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1;
-    }
-    return 0;
-  });
   const editCategory = (category) => {
     const parentCategoryId = category.parent;
     setEditedCategory(category);
@@ -83,10 +77,8 @@ export default function categories() {
           value={parentCategory}
           onChange={(ev) => setParentCategory(ev.target.value)}>
           <option value="0">Нет родительской категории</option>
-          {sortedCategoriesList.length > 0 &&
-            sortedCategoriesList.map((category) => (
-              <option value={category.id}>{category.name}</option>
-            ))}
+          {categoriesList.length > 0 &&
+            categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
         </select>
         <button type="submit" className="btn-primary">
           Сохранить
@@ -101,8 +93,8 @@ export default function categories() {
           </tr>
         </thead>
         <tbody>
-          {sortedCategoriesList.length > 0 &&
-            sortedCategoriesList.map((category) => (
+          {categoriesList.length > 0 &&
+            categoriesList.map((category) => (
               <tr key={category.id}>
                 <td>{category.name}</td>
                 <td>
