@@ -8,6 +8,7 @@
 - JavaScript
 - React
 - Next.js
+- Redux-toolkit
 - Next-auth
 - Firebase
 - Heroicons
