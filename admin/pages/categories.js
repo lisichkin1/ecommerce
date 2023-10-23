@@ -81,6 +81,12 @@ export default function categories() {
       return properties;
     });
   };
+  const removeProperty = (index) => {
+    setProperties((prev) => {
+      const newProperties = [...prev];
+      return newProperties.filter((el, indexEl) => index !== indexEl);
+    });
+  };
   return (
     <Layout>
       <h1>Категории</h1>
@@ -88,7 +94,7 @@ export default function categories() {
         {editedCategory ? `Редактировать категорию ${editedCategory.name}` : 'Новая категория'}
       </label>
       <form onSubmit={saveCategory}>
-        <div className="flex gap-1">
+        <div className="flex gap-4">
           <input
             className="mb-0"
             type="text"
@@ -109,12 +115,12 @@ export default function categories() {
         </div>
         <div className="mb-4">
           <label>Характеристики</label>
-          <button className="button-default-secondary" onClick={addProperty} type="button">
+          <button className="button-default-secondary mb-4" onClick={addProperty} type="button">
             Добавить характеристику
           </button>
           {properties.length > 0 &&
             properties.map((property, index) => (
-              <div className="flex gap-1 items-center justify-center">
+              <div className="flex gap-4 items-center justify-center mb-4">
                 <input
                   className="mb-0"
                   type="text"
@@ -129,7 +135,10 @@ export default function categories() {
                   value={property.values}
                   onChange={(ev) => updatePropertyValues(index, property, ev.target.value)}
                 />
-                <button className="button-default-third">
+                <button
+                  className="button-default-third"
+                  type="button"
+                  onClick={() => removeProperty(index)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
