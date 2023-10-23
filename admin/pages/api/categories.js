@@ -5,10 +5,11 @@ export default async function handle(req, res) {
   const { method } = req;
   if (method === 'POST') {
     try {
-      const { name, parentCategory } = req.body;
+      const { name, parentCategory, properties } = req.body;
       const newDocRef = await addDoc(collection(db, 'categories'), {
         name: name,
         parent: parentCategory,
+        properties: properties,
       });
       console.log('Категория успешно добавлена с идентификатором: ', newDocRef.id);
       res.status(200).json({ message: 'категория успешно создана' });
@@ -32,11 +33,12 @@ export default async function handle(req, res) {
     }
   } else if (method === 'PUT') {
     try {
-      const { name, parentCategory, id } = req.body;
+      const { name, parentCategory, id, properties } = req.body;
       const productDocRef = doc(db, 'categories', id);
       await updateDoc(productDocRef, {
         name: name,
         parent: parentCategory,
+        properties: properties,
       });
       res.status(200).json({ message: 'категория успешно обновлена' });
     } catch (error) {

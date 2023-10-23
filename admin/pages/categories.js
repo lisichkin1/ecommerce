@@ -25,7 +25,7 @@ export default function categories() {
   };
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    const data = { name, parentCategory };
+    const data = { name, parentCategory, properties };
     if (editedCategory) {
       await axios.put('/api/categories', { ...data, id: editedCategory.id });
       setEditedCategory(null);
