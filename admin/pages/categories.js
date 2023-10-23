@@ -25,7 +25,11 @@ export default function categories() {
   };
   const saveCategory = async (ev) => {
     ev.preventDefault();
-    const data = { name, parentCategory, properties };
+    const data = {
+      name,
+      parentCategory,
+      properties: properties.map((el) => ({ name: el.name, values: el.values.split(',') })),
+    };
     if (editedCategory) {
       await axios.put('/api/categories', { ...data, id: editedCategory.id });
       setEditedCategory(null);
@@ -33,6 +37,8 @@ export default function categories() {
       await axios.post('/api/categories', data);
     }
     setName('');
+    setParentCategory('');
+    setProperties([]);
     fetchCategories();
   };
   const editCategory = (category) => {
@@ -40,6 +46,7 @@ export default function categories() {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(parentCategoryId || '0');
+    setProperties(category.properties);
     console.log(parentCategoryId);
     console.log(parentCategory);
   };
@@ -161,16 +168,18 @@ export default function categories() {
           <button type="submit" className="btn-primary">
             Сохранить
           </button>
-          <button
-            type="button"
-            className="button-default-secondary"
-            onClick={() => {
-              setEditedCategory(null);
-              setParentCategory('');
-              setName('');
-            }}>
-            Отменить
-          </button>
+          {editedCategory && (
+            <button
+              type="button"
+              className="button-default-secondary"
+              onClick={() => {
+                setEditedCategory(null);
+                setParentCategory('');
+                setName('');
+              }}>
+              Отменить
+            </button>
+          )}
         </div>
       </form>
       {!editedCategory && (
