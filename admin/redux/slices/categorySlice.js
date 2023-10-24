@@ -7,13 +7,13 @@ const categoriesSlice = createSlice({
     parentCategory: '',
     editedCategory: null,
     categories: [],
-    sortedCategories: [],
+    categoriesList: [],
     properties: [],
   },
   reducers: {
     setCategories: (state, action) => {
       state.categories = action.payload;
-      state.sortedCategories = action.payload.slice().sort((a, b) => {
+      state.categoriesList = action.payload.slice().sort((a, b) => {
         return a.name.toLowerCase() < b.name.toLowerCase()
           ? -1
           : a.name.toLowerCase() > b.name.toLowerCase()

@@ -16,11 +16,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
   const dispatch = useDispatch();
-  const name = useSelector((state) => state.categorySlice.name);
-  const parentCategory = useSelector((state) => state.categorySlice.parentCategory);
-  const editedCategory = useSelector((state) => state.categorySlice.editedCategory);
-  const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
-  const properties = useSelector((state) => state.categorySlice.properties);
+  const { name, parentCategory, editedCategory, categoriesList, properties } = useSelector(
+    (state) => state.categorySlice,
+  );
 
   useEffect(() => {
     fetchCategories();
