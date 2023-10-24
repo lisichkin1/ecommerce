@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState: {
+    name: '',
+    parentCategory: '',
+    editedCategory: null,
     categories: [],
     sortedCategories: [],
   },
@@ -17,8 +20,17 @@ const categoriesSlice = createSlice({
           : 0;
       });
     },
+    setName: (state, action) => {
+      state.name = action.payload;
+    },
+    setParentCategory: (state, action) => {
+      state.parentCategory = action.payload;
+    },
+    setEditedCategory: (state, action) => {
+      state.editedCategory = action.payload;
+    },
   },
 });
 
-export const { setCategories } = categoriesSlice.actions;
+export const { setCategories, setName } = categoriesSlice.actions;
 export default categoriesSlice.reducer;
