@@ -19,13 +19,9 @@ export default function categories() {
   const { name, parentCategory, editedCategory, categoriesList, properties } = useSelector(
     (state) => state.categorySlice,
   );
-
   useEffect(() => {
     fetchCategories();
   }, []);
-  useEffect(() => {
-    console.log(properties);
-  }, [properties]);
   const fetchCategories = () => {
     axios.get('/api/categories').then((response) => {
       dispatch(setCategories(response.data));
@@ -59,8 +55,6 @@ export default function categories() {
         category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
       ),
     );
-    console.log(parentCategoryId);
-    console.log(parentCategory);
   };
   const deleteCategory = (category) => {
     Swal.fire({
