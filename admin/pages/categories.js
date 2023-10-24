@@ -40,9 +40,13 @@ export default function categories() {
     } else {
       await axios.post('/api/categories', data);
     }
-    dispatch(setName(''));
-    dispatch(setParentCategory(''));
-    dispatch(setProperties([]));
+    const actions = [
+      setEditedCategory(null),
+      setName(''),
+      setParentCategory(''),
+      setProperties([]),
+    ];
+    actions.forEach((action) => dispatch(action));
     fetchCategories();
   };
   const editCategory = (category) => {
