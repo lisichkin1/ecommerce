@@ -46,7 +46,9 @@ export default function categories() {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(parentCategoryId || '0');
-    setProperties(category.properties);
+    setProperties(
+      category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
+    );
     console.log(parentCategoryId);
     console.log(parentCategory);
   };
