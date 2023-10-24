@@ -51,14 +51,15 @@ export default function categories() {
   };
   const editCategory = (category) => {
     const parentCategoryId = category.parent;
-    dispatch(setEditedCategory(category));
-    dispatch(setName(category.name));
-    dispatch(setParentCategory(parentCategoryId || '0'));
-    dispatch(
+    const actions = [
+      setEditedCategory(category),
+      setName(category.name),
+      setParentCategory(parentCategoryId || '0'),
       setProperties(
         category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
       ),
-    );
+    ];
+    actions.forEach((action) => dispatch(action));
   };
   const deleteCategory = (category) => {
     Swal.fire({
