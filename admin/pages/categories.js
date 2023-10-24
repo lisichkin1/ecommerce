@@ -84,12 +84,8 @@ export default function categories() {
   const handleUpdatePropertyName = (index, property, newName) => {
     dispatch(updatePropertyName({ index, property, newName }));
   };
-  const updatePropertyValues = (index, property, newValues) => {
-    setProperties((prev) => {
-      const properties = [...prev];
-      properties[index].values = newValues;
-      return properties;
-    });
+  const handleUpdatePropertyValues = (index, property, newValues) => {
+    dispatch(updatePropertyName({ index, property, newValues }));
   };
   const removeProperty = (index) => {
     setProperties((prev) => {
@@ -146,7 +142,7 @@ export default function categories() {
                   type="text"
                   placeholder="Значение(разделённое запятой)"
                   value={property.values}
-                  onChange={(ev) => updatePropertyValues(index, property, ev.target.value)}
+                  onChange={(ev) => handleUpdatePropertyValues(index, property, ev.target.value)}
                 />
                 <button
                   className="button-default-third"
