@@ -2,7 +2,12 @@ import Layout from '@/components/Layout';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
-import { setCategories, setName } from '@/redux/slices/categorySlice';
+import {
+  setCategories,
+  setEditedCategory,
+  setName,
+  setParentCategory,
+} from '@/redux/slices/categorySlice';
 import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
   const dispatch = useDispatch();
@@ -32,20 +37,20 @@ export default function categories() {
     };
     if (editedCategory) {
       await axios.put('/api/categories', { ...data, id: editedCategory.id });
-      setEditedCategory(null);
+      dispatch(setEditedCategory(null));
     } else {
       await axios.post('/api/categories', data);
     }
     dispatch(setName(''));
-    setParentCategory('');
+    dispatch(setParentCategory(''));
     setProperties([]);
     fetchCategories();
   };
   const editCategory = (category) => {
     const parentCategoryId = category.parent;
-    setEditedCategory(category);
+    dispatch(setEditedCategory(category));
     dispatch(setName(category.name));
-    setParentCategory(parentCategoryId || '0');
+    dispatch(setParentCategory(parentCategoryId || '0'));
     setProperties(
       category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
     );
@@ -114,7 +119,7 @@ export default function categories() {
           <select
             className="mb-0"
             value={parentCategory}
-            onChange={(ev) => setParentCategory(ev.target.value)}>
+            onChange={(ev) => dispatch(setParentCategory(ev.target.value))}>
             <option value="0">Нет родительской категории</option>
             {categoriesList.length > 0 &&
               categoriesList.map((category) => (
@@ -175,8 +180,8 @@ export default function categories() {
               type="button"
               className="button-default-secondary"
               onClick={() => {
-                setEditedCategory(null);
-                setParentCategory('');
+                dispatch(setEditedCategory(null));
+                dispatch(setParentCategory(''));
                 dispatch(setName(''));
                 setProperties([]);
               }}>
