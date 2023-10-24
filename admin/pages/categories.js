@@ -2,15 +2,15 @@ import Layout from '@/components/Layout';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
-import { setCategories } from '@/redux/slices/categorySlice';
+import { setCategories, setName } from '@/redux/slices/categorySlice';
 import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
   const dispatch = useDispatch();
-  const [name, setName] = useState('');
-  const [parentCategory, setParentCategory] = useState('');
-  const [editedCategory, setEditedCategory] = useState(null);
-  const [properties, setProperties] = useState([]);
+  const name = useSelector((state) => state.categorySlice.name);
+  const parentCategory = useSelector((state) => state.categorySlice.parentCategory);
+  const editedCategory = useSelector((state) => state.categorySlice.editedCategory);
   const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
+  const [properties, setProperties] = useState([]);
 
   useEffect(() => {
     fetchCategories();
@@ -36,7 +36,7 @@ export default function categories() {
     } else {
       await axios.post('/api/categories', data);
     }
-    setName('');
+    dispatch(setName(''));
     setParentCategory('');
     setProperties([]);
     fetchCategories();
@@ -44,7 +44,7 @@ export default function categories() {
   const editCategory = (category) => {
     const parentCategoryId = category.parent;
     setEditedCategory(category);
-    setName(category.name);
+    dispatch(setName(category.name));
     setParentCategory(parentCategoryId || '0');
     setProperties(
       category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
@@ -109,7 +109,7 @@ export default function categories() {
             type="text"
             placeholder="Название категории"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => dispatch(setName(e.target.value))}
           />
           <select
             className="mb-0"
@@ -177,7 +177,8 @@ export default function categories() {
               onClick={() => {
                 setEditedCategory(null);
                 setParentCategory('');
-                setName('');
+                dispatch(setName(''));
+                setProperties([]);
               }}>
               Отменить
             </button>
