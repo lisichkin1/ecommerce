@@ -32,5 +32,6 @@ const categoriesSlice = createSlice({
   },
 });
 
-export const { setCategories, setName } = categoriesSlice.actions;
+export const { setCategories, setName, setParentCategory, setEditedCategory } =
+  categoriesSlice.actions;
 export default categoriesSlice.reducer;
