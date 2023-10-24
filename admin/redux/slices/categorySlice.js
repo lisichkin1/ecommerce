@@ -36,6 +36,10 @@ const categoriesSlice = createSlice({
     addProperty: (state, action) => {
       state.properties.push({ name: '', values: '' });
     },
+    updatePropertyName: (state, action) => {
+      const { index, property, newName } = action.payload;
+      state.properties[index].name = newName;
+    },
   },
 });
 
@@ -46,5 +50,6 @@ export const {
   setEditedCategory,
   setProperties,
   addProperty,
+  updatePropertyName,
 } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

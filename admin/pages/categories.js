@@ -8,6 +8,7 @@ import {
   setEditedCategory,
   setName,
   setParentCategory,
+  updatePropertyName,
 } from '@/redux/slices/categorySlice';
 import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
@@ -80,12 +81,8 @@ export default function categories() {
   const handleAddProperty = () => {
     dispatch(addProperty());
   };
-  const updatePropertyName = (index, property, newName) => {
-    setProperties((prev) => {
-      const properties = [...prev];
-      properties[index].name = newName;
-      return properties;
-    });
+  const handleUpdatePropertyName = (index, property, newName) => {
+    dispatch(updatePropertyName({ index, property, newName }));
   };
   const updatePropertyValues = (index, property, newValues) => {
     setProperties((prev) => {
@@ -142,7 +139,7 @@ export default function categories() {
                   type="text"
                   placeholder="Название характеристики"
                   value={property.name}
-                  onChange={(ev) => updatePropertyName(index, property, ev.target.value)}
+                  onChange={(ev) => handleUpdatePropertyName(index, property, ev.target.value)}
                 />
                 <input
                   className="mb-0"
