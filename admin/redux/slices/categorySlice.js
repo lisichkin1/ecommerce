@@ -44,6 +44,10 @@ const categoriesSlice = createSlice({
       const { index, property, newValues } = action.payload;
       state.properties[index].values = newValues;
     },
+    removeProperty: (state, action) => {
+      const { index } = action.payload;
+      state.properties = state.properties.filter((el, indexEl) => index !== indexEl);
+    },
   },
 });
 
@@ -56,5 +60,6 @@ export const {
   addProperty,
   updatePropertyName,
   updatePropertyValues,
+  removeProperty,
 } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

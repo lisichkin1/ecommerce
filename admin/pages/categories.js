@@ -4,11 +4,14 @@ import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
 import {
   addProperty,
+  removeProperty,
   setCategories,
   setEditedCategory,
   setName,
   setParentCategory,
   updatePropertyName,
+  updatePropertyValues,
+  setProperties,
 } from '@/redux/slices/categorySlice';
 import { useSelector, useDispatch } from 'react-redux';
 export default function categories() {
@@ -45,7 +48,7 @@ export default function categories() {
     }
     dispatch(setName(''));
     dispatch(setParentCategory(''));
-    setProperties([]);
+    dispatch(setProperties([]));
     fetchCategories();
   };
   const editCategory = (category) => {
@@ -53,8 +56,10 @@ export default function categories() {
     dispatch(setEditedCategory(category));
     dispatch(setName(category.name));
     dispatch(setParentCategory(parentCategoryId || '0'));
-    setProperties(
-      category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
+    dispatch(
+      setProperties(
+        category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
+      ),
     );
     console.log(parentCategoryId);
     console.log(parentCategory);
@@ -85,13 +90,10 @@ export default function categories() {
     dispatch(updatePropertyName({ index, property, newName }));
   };
   const handleUpdatePropertyValues = (index, property, newValues) => {
-    dispatch(updatePropertyName({ index, property, newValues }));
+    dispatch(updatePropertyValues({ index, property, newValues }));
   };
-  const removeProperty = (index) => {
-    setProperties((prev) => {
-      const newProperties = [...prev];
-      return newProperties.filter((el, indexEl) => index !== indexEl);
-    });
+  const handleRemoveProperty = (index) => {
+    dispatch(removeProperty({ index }));
   };
   return (
     <Layout>
@@ -147,7 +149,7 @@ export default function categories() {
                 <button
                   className="button-default-third"
                   type="button"
-                  onClick={() => removeProperty(index)}>
+                  onClick={() => handleRemoveProperty(index)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -178,7 +180,7 @@ export default function categories() {
                 dispatch(setEditedCategory(null));
                 dispatch(setParentCategory(''));
                 dispatch(setName(''));
-                setProperties([]);
+                dispatch(setProperties([]));
               }}>
               Отменить
             </button>
