@@ -8,6 +8,7 @@ const categoriesSlice = createSlice({
     editedCategory: null,
     categories: [],
     sortedCategories: [],
+    properties: [],
   },
   reducers: {
     setCategories: (state, action) => {
@@ -29,9 +30,21 @@ const categoriesSlice = createSlice({
     setEditedCategory: (state, action) => {
       state.editedCategory = action.payload;
     },
+    setProperties: (state, action) => {
+      state.properties = action.payload;
+    },
+    addProperty: (state, action) => {
+      state.properties.push({ name: '', values: '' });
+    },
   },
 });
 
-export const { setCategories, setName, setParentCategory, setEditedCategory } =
-  categoriesSlice.actions;
+export const {
+  setCategories,
+  setName,
+  setParentCategory,
+  setEditedCategory,
+  setProperties,
+  addProperty,
+} = categoriesSlice.actions;
 export default categoriesSlice.reducer;

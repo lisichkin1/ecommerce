@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import React, { useEffect, useState } from 'react';
 import {
+  addProperty,
   setCategories,
   setEditedCategory,
   setName,
@@ -15,7 +16,7 @@ export default function categories() {
   const parentCategory = useSelector((state) => state.categorySlice.parentCategory);
   const editedCategory = useSelector((state) => state.categorySlice.editedCategory);
   const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
-  const [properties, setProperties] = useState([]);
+  const properties = useSelector((state) => state.categorySlice.properties);
 
   useEffect(() => {
     fetchCategories();
@@ -76,10 +77,8 @@ export default function categories() {
       }
     });
   };
-  const addProperty = () => {
-    setProperties((prev) => {
-      return [...prev, { name: '', values: '' }];
-    });
+  const handleAddProperty = () => {
+    dispatch(addProperty());
   };
   const updatePropertyName = (index, property, newName) => {
     setProperties((prev) => {
@@ -129,7 +128,10 @@ export default function categories() {
         </div>
         <div className="mb-4">
           <label>Характеристики</label>
-          <button className="button-default-secondary mb-4" onClick={addProperty} type="button">
+          <button
+            className="button-default-secondary mb-4"
+            onClick={handleAddProperty}
+            type="button">
             Добавить характеристику
           </button>
           {properties.length > 0 &&
