@@ -56,7 +56,7 @@ export default function categories() {
       setName(category.name),
       setParentCategory(parentCategoryId || '0'),
       setProperties(
-        category.properties.map(({ name, values }) => ({ name, values: values.join(',') })),
+        category?.properties?.map(({ name, values }) => ({ name, values: values.join(',') })),
       ),
     ];
     actions.forEach((action) => dispatch(action));
@@ -126,7 +126,7 @@ export default function categories() {
             type="button">
             Добавить характеристику
           </button>
-          {properties.length > 0 &&
+          {properties?.length > 0 &&
             properties.map((property, index) => (
               <div className="flex gap-4 items-center justify-center mb-4">
                 <input
