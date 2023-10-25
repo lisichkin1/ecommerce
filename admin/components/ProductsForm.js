@@ -122,7 +122,17 @@ export default function ProductsForm({
         {categoriesList.length > 0 &&
           categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
       </select>
-      {propertiesToFill.length > 0 && propertiesToFill.map((el) => <div>{el.name}</div>)}
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((el) => (
+          <div className="flex gap-2">
+            <span>{el.name}</span>
+            <select>
+              {el.values.map((e, index) => (
+                <option value={e}>{e}</option>
+              ))}
+            </select>
+          </div>
+        ))}
       <label>Фотографии</label>
       <div className="mb-4 flex flex-wrap gap-2">
         <ReactSortable list={images} setList={updateImagesOrder} className="flex flex-wrap gap-2">
