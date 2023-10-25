@@ -29,7 +29,7 @@ export default function ProductsForm({
   const [images, setImages] = useState(existingImages || []);
   const [isUploading, setIsUploading] = useState(false);
   const [category, setCategory] = useState('' || existingCategory);
-  const categoriesList = useSelector((state) => state.categorySlice.sortedCategories);
+  const categoriesList = useSelector((state) => state.categorySlice.categoriesList);
 
   useEffect(() => {
     fetchCategories();
