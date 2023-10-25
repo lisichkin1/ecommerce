@@ -35,10 +35,7 @@ export default function ProductsForm({
   useEffect(() => {
     fetchCategories();
   }, []);
-  useEffect(() => {
-    console.log('лист ', categoriesList);
-    console.log('категория ', category);
-  }, [categoriesList, category]);
+
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
@@ -103,7 +100,6 @@ export default function ProductsForm({
       }
       catInfo = categoriesList.find(({ id }) => id === catInfo.parent);
     }
-    console.log('ИЗМЕНЕНО', propertiesToFill);
   }
 
   return (
