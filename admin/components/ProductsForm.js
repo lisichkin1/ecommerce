@@ -25,6 +25,7 @@ export default function ProductsForm({
   });
   const router = useRouter();
   const dispatch = useDispatch();
+  const propertiesToFill = [];
   const [goToProduct, setGoToProduct] = useState(false);
   const [images, setImages] = useState(existingImages || []);
   const [isUploading, setIsUploading] = useState(false);
@@ -34,6 +35,10 @@ export default function ProductsForm({
   useEffect(() => {
     fetchCategories();
   }, []);
+  useEffect(() => {
+    console.log('лист ', categoriesList);
+    console.log('категория ', category);
+  }, [categoriesList, category]);
   const addItem = async (e) => {
     e.preventDefault();
     if (id) {
@@ -90,6 +95,16 @@ export default function ProductsForm({
       dispatch(setCategories(response.data));
     });
   };
+  if (categoriesList.length > 0 && category) {
+    let catInfo = categoriesList.find(({ id }) => id === category);
+    while (catInfo) {
+      if (catInfo.properties) {
+        propertiesToFill.push(...catInfo.properties);
+      }
+      catInfo = categoriesList.find(({ id }) => id === catInfo.parent);
+    }
+    console.log('ИЗМЕНЕНО', propertiesToFill);
+  }
 
   return (
     <form>
@@ -107,6 +122,7 @@ export default function ProductsForm({
         {categoriesList.length > 0 &&
           categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
       </select>
+      {propertiesToFill.length > 0 && propertiesToFill.map((el) => <div>{el.name}</div>)}
       <label>Фотографии</label>
       <div className="mb-4 flex flex-wrap gap-2">
         <ReactSortable list={images} setList={updateImagesOrder} className="flex flex-wrap gap-2">
