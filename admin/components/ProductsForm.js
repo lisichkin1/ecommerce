@@ -120,15 +120,21 @@ export default function ProductsForm({
       <select className="mb-0" value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="0">Нет родительской категории</option>
         {categoriesList.length > 0 &&
-          categoriesList.map((category) => <option value={category.id}>{category.name}</option>)}
+          categoriesList.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
       </select>
       {propertiesToFill.length > 0 &&
-        propertiesToFill.map((el) => (
-          <div className="flex gap-2">
+        propertiesToFill.map((el, index) => (
+          <div key={index} className="flex gap-2">
             <span>{el.name}</span>
             <select>
               {el.values.map((e, index) => (
-                <option value={e}>{e}</option>
+                <option key={index} value={e}>
+                  {e}
+                </option>
               ))}
             </select>
           </div>
