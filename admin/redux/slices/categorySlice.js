@@ -34,7 +34,7 @@ const categoriesSlice = createSlice({
       state.properties = action.payload;
     },
     addProperty: (state, action) => {
-      state.properties.push({ name: '', values: '' });
+      state.properties = [...state.properties, { name: '', values: '' }];
     },
     updatePropertyName: (state, action) => {
       const { index, property, newName } = action.payload;

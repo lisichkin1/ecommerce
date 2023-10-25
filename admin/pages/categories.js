@@ -56,7 +56,7 @@ export default function categories() {
       setName(category.name),
       setParentCategory(parentCategoryId || '0'),
       setProperties(
-        category?.properties?.map(({ name, values }) => ({ name, values: values.join(',') })),
+        category?.properties?.map(({ name, values }) => ({ name, values: values.join(',') })) || [],
       ),
     ];
     actions.forEach((action) => dispatch(action));
