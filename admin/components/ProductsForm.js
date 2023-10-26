@@ -8,6 +8,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { setCategories } from '@/redux/slices/categorySlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Spinner from './Spinner';
+import { setProductProperties } from '@/redux/slices/productSlice';
 
 export default function ProductsForm({
   id,
@@ -16,6 +17,7 @@ export default function ProductsForm({
   price: existingPrice,
   images: existingImages,
   category: existingCategory,
+  properties: existingProperties,
 }) {
   const [newItem, setNewItem] = useState({
     title: existingTitle || '',
@@ -31,10 +33,20 @@ export default function ProductsForm({
   const [isUploading, setIsUploading] = useState(false);
   const [category, setCategory] = useState('' || existingCategory);
   const categoriesList = useSelector((state) => state.categorySlice.categoriesList);
+  const productProperties = useSelector((state) => state.productSlice.productProperties);
 
+  console.log('настройка ', existingProperties);
   useEffect(() => {
     fetchCategories();
   }, []);
+  useEffect(() => {
+    dispatch(setProductProperties(existingProperties || {}));
+  }, []);
+
+  useEffect(() => {
+    console.log('productProperties', productProperties);
+    console.log('propertiesToFill', propertiesToFill);
+  }, [productProperties]);
 
   const addItem = async (e) => {
     e.preventDefault();
@@ -46,6 +58,7 @@ export default function ProductsForm({
             id,
             images,
             category,
+            productProperties,
           });
           console.log('Сервер вернул:', response.data);
           setNewItem({ title: '', description: '', price: '', images: [] });
@@ -56,7 +69,12 @@ export default function ProductsForm({
     } else {
       if (newItem.title !== '' && newItem.price !== '' && newItem.description !== '') {
         try {
-          const response = await axios.post('/api/products', { ...newItem, images, category });
+          const response = await axios.post('/api/products', {
+            ...newItem,
+            images,
+            category,
+            productProperties,
+          });
           console.log('Сервер вернул:', response.data);
           setNewItem({ title: '', description: '', price: '', images: [] });
         } catch (error) {
@@ -101,6 +119,15 @@ export default function ProductsForm({
       catInfo = categoriesList.find(({ id }) => id === catInfo.parent);
     }
   }
+  const setProductProp = (propName, value) => {
+    console.log('ПРОПСЫ', propName, value);
+    dispatch(
+      setProductProperties({
+        ...productProperties,
+        [propName]: value,
+      }),
+    );
+  };
 
   return (
     <form>
@@ -126,7 +153,10 @@ export default function ProductsForm({
         propertiesToFill.map((el, index) => (
           <div key={index} className="flex gap-2">
             <span>{el.name}</span>
-            <select>
+            <select
+              value={productProperties[el.name] || '0'}
+              onChange={(ev) => setProductProp(el.name, ev.target.value)}>
+              <option value="0">Нет настройки</option>
               {el.values.map((e, index) => (
                 <option key={index} value={e}>
                   {e}
