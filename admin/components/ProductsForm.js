@@ -38,8 +38,6 @@ export default function ProductsForm({
   console.log('настройка ', existingProperties);
   useEffect(() => {
     fetchCategories();
-  }, []);
-  useEffect(() => {
     dispatch(setProductProperties(existingProperties || {}));
   }, []);
 
