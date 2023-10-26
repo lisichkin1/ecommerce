@@ -34,17 +34,10 @@ export default function ProductsForm({
   const [category, setCategory] = useState('' || existingCategory);
   const categoriesList = useSelector((state) => state.categorySlice.categoriesList);
   const productProperties = useSelector((state) => state.productSlice.productProperties);
-
-  console.log('настройка ', existingProperties);
   useEffect(() => {
     fetchCategories();
     dispatch(setProductProperties(existingProperties || {}));
   }, []);
-
-  useEffect(() => {
-    console.log('productProperties', productProperties);
-    console.log('propertiesToFill', propertiesToFill);
-  }, [productProperties]);
 
   const addItem = async (e) => {
     e.preventDefault();
@@ -118,7 +111,6 @@ export default function ProductsForm({
     }
   }
   const setProductProp = (propName, value) => {
-    console.log('ПРОПСЫ', propName, value);
     dispatch(
       setProductProperties({
         ...productProperties,
