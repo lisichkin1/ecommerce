@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { FirestoreAdapter } from '@auth/firebase-adapter';
 import { cert } from 'firebase-admin/app';
+const adminEmails = [process.env.ADMIN_EMAIL];
 export const authOptions = {
   providers: [
     GoogleProvider({
@@ -16,6 +17,15 @@ export const authOptions = {
       privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
     }),
   }),
+  callbacks: {
+    session: ({ session, token, user }) => {
+      if (adminEmails.includes(session?.user?.email)) {
+        return session;
+      } else {
+        return false;
+      }
+    },
+  },
 };
 
 export default NextAuth(authOptions);
