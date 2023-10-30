@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { FirestoreAdapter } from '@auth/firebase-adapter';
 import { cert } from 'firebase-admin/app';
@@ -20,6 +20,7 @@ export const authOptions = {
   callbacks: {
     session: ({ session, token, user }) => {
       if (adminEmails.includes(session?.user?.email)) {
+        console.log({ session, token, user });
         return session;
       } else {
         return false;
@@ -29,3 +30,11 @@ export const authOptions = {
 };
 
 export default NextAuth(authOptions);
+
+export async function isAdminAuth(req, res) {
+  const session = await getServerSession(req, res, authOptions);
+  console.log(session);
+  if (!adminEmails.includes(session?.user?.email)) {
+    throw new Error('not an admin');
+  }
+}
