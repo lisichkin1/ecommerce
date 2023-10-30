@@ -1,8 +1,10 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { isAdminAuth } from './auth/[...nextauth]';
 
 export default async function handle(req, res) {
   const { method } = req;
+  await isAdminAuth(req, res);
   if (method === 'POST') {
     try {
       const { name, parentCategory, properties } = req.body;
