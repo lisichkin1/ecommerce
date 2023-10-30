@@ -2,7 +2,7 @@ import Layout from '@/components/Layout';
 import { useSession } from 'next-auth/react';
 export default function Component() {
   const { data: session } = useSession();
-  if (!session) return;
+  if (!session) return <Layout />;
   return (
     <Layout>
       <div className="flex text-green-500 justify-between items-center">
